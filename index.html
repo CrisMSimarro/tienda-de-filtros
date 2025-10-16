@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>Tienda Online de productos variados | Cristina Martínez</title>
+    <meta
+      name="description"
+      content="Explora nuestra tienda online: ropa y artículos para el hogar."
+    />
+    <meta
+      name="keywords"
+      content="tienda online, productos, ropa, hogar, comprar en línea"
+    />
+    <meta name="author" content="Cristina Martínez" />
+    <meta name="robots" content="index, follow" />
+
+    <meta
+      property="og:title"
+      content="Tienda Online de Productos Variados | Cristina Martínez"
+    />
+    <meta
+      property="og:description"
+      content="Compra ropa y artículos para el hogar en nuestra tienda online."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.ecommerce.com/" />
+    <meta
+      property="og:image"
+      content="https://www.ecommerce.com/imagen-destacada.jpg"
+    />
+
+    <link rel="canonical" href="https://www.ecommerce.com/" />
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Tienda de productos variados</h1>
+      <button id="open-filters">Filtro</button>
+    </header>
+
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <button id="close-modal" class="close" aria-label="Cerrar modal">
+          &times;
+        </button>
+        <h2>Filtrar Productos</h2>
+        <form id="filter-form">
+          <label>
+            Categoría:
+            <select id="category-filter">
+              <option value="">Todas</option>
+              <option value="Ropa">Ropa</option>
+              <option value="Hogar">Hogar</option>
+              <option value="Beauty">Belleza</option>
+              <option value="Almacenaje">Almacenaje</option>
+            </select>
+          </label>
+
+          <label>
+            Precio máximo:
+            <input type="number" id="price-filter" placeholder="0" />
+          </label>
+
+          <button type="submit">Aplicar filtros</button>
+          <button type="button" id="clear-filters">Limpiar filtros</button>
+        </form>
+      </div>
+    </div>
+
+    <main>
+      <div id="products-container" class="products-container"></div>
+      <div id="suggested-products" class="suggested-products hidden">
+        <h3>Productos sugeridos</h3>
+        <div id="suggested-container" class="products-container"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Cristina Martínez - Tienda de Productos</p>
+    </footer>
+
+    <script src="/index.js"></script>
+  </body>
+</html>
