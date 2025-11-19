@@ -1,3 +1,6 @@
+// =======================
+// Datos de productos
+// =======================
 const products = [
   {
     id: 1,
@@ -98,14 +101,150 @@ const products = [
     img: 'https://image.hm.com/assets/hm/d4/37/d437589ac220b26852dc38c20120387c50bce307.jpg?imwidth=1260'
   }
 ]
-const productsContainer = document.getElementById('products-container')
-const suggestedContainer = document.getElementById('suggested-container')
-const suggestedSection = document.getElementById('suggested-products')
-const openFiltersBtn = document.getElementById('open-filters')
-const closeModalBtn = document.getElementById('close-modal')
-const modal = document.getElementById('modal')
-const filterForm = document.getElementById('filter-form')
-const clearFiltersBtn = document.getElementById('clear-filters')
+
+// =======================
+// Creación de estructura DOM
+// (HTML solo tiene <header> y <footer>)
+// =======================
+
+// Referencias a header y footer del HTML
+const header = document.querySelector('header')
+const footer = document.querySelector('footer')
+
+// ----- Header -----
+const title = document.createElement('h1')
+title.textContent = 'Tienda de productos variados'
+
+const openFiltersBtn = document.createElement('button')
+openFiltersBtn.id = 'open-filters'
+openFiltersBtn.textContent = 'Filtro'
+
+header.appendChild(title)
+header.appendChild(openFiltersBtn)
+
+// ----- Modal de filtros -----
+const modal = document.createElement('div')
+modal.id = 'modal'
+modal.classList.add('modal', 'hidden')
+
+const modalContent = document.createElement('div')
+modalContent.classList.add('modal-content')
+
+const closeModalBtn = document.createElement('button')
+closeModalBtn.id = 'close-modal'
+closeModalBtn.classList.add('close')
+closeModalBtn.setAttribute('aria-label', 'Cerrar modal')
+closeModalBtn.innerHTML = '&times;'
+
+const modalTitle = document.createElement('h2')
+modalTitle.textContent = 'Filtrar Productos'
+
+const filterForm = document.createElement('form')
+filterForm.id = 'filter-form'
+
+// Campo categoría
+const categoryLabel = document.createElement('label')
+categoryLabel.textContent = 'Categoría: '
+
+const categorySelect = document.createElement('select')
+categorySelect.id = 'category-filter'
+
+const optionAll = document.createElement('option')
+optionAll.value = ''
+optionAll.textContent = 'Todas'
+
+const optionRopa = document.createElement('option')
+optionRopa.value = 'Ropa'
+optionRopa.textContent = 'Ropa'
+
+const optionHogar = document.createElement('option')
+optionHogar.value = 'Hogar'
+optionHogar.textContent = 'Hogar'
+
+const optionBeauty = document.createElement('option')
+optionBeauty.value = 'Beauty'
+optionBeauty.textContent = 'Belleza'
+
+const optionAlmacenaje = document.createElement('option')
+optionAlmacenaje.value = 'Almacenaje'
+optionAlmacenaje.textContent = 'Almacenaje'
+
+categorySelect.appendChild(optionAll)
+categorySelect.appendChild(optionRopa)
+categorySelect.appendChild(optionHogar)
+categorySelect.appendChild(optionBeauty)
+categorySelect.appendChild(optionAlmacenaje)
+
+categoryLabel.appendChild(categorySelect)
+
+// Campo precio
+const priceLabel = document.createElement('label')
+priceLabel.textContent = 'Precio máximo: '
+
+const priceInput = document.createElement('input')
+priceInput.type = 'number'
+priceInput.id = 'price-filter'
+priceInput.placeholder = '0'
+
+priceLabel.appendChild(priceInput)
+
+// Botones del formulario
+const applyBtn = document.createElement('button')
+applyBtn.type = 'submit'
+applyBtn.textContent = 'Aplicar filtros'
+
+const clearFiltersBtn = document.createElement('button')
+clearFiltersBtn.type = 'button'
+clearFiltersBtn.id = 'clear-filters'
+clearFiltersBtn.textContent = 'Limpiar filtros'
+
+// Montar formulario
+filterForm.appendChild(categoryLabel)
+filterForm.appendChild(priceLabel)
+filterForm.appendChild(applyBtn)
+filterForm.appendChild(clearFiltersBtn)
+
+// Montar modal
+modalContent.appendChild(closeModalBtn)
+modalContent.appendChild(modalTitle)
+modalContent.appendChild(filterForm)
+modal.appendChild(modalContent)
+
+// Insertar modal en el body
+document.body.appendChild(modal)
+
+// ----- Main y contenedores -----
+const main = document.createElement('main')
+
+// Contenedor de productos
+const productsContainer = document.createElement('div')
+productsContainer.id = 'products-container'
+productsContainer.classList.add('products-container')
+
+// Sección de productos sugeridos
+const suggestedSection = document.createElement('div')
+suggestedSection.id = 'suggested-products'
+suggestedSection.classList.add('suggested-products', 'hidden')
+
+const suggestedTitle = document.createElement('h3')
+suggestedTitle.textContent = 'Productos sugeridos'
+
+const suggestedContainer = document.createElement('div')
+suggestedContainer.id = 'suggested-container'
+suggestedContainer.classList.add('products-container')
+
+suggestedSection.appendChild(suggestedTitle)
+suggestedSection.appendChild(suggestedContainer)
+
+// Meter todo en main
+main.appendChild(productsContainer)
+main.appendChild(suggestedSection)
+
+// Insertar main antes del footer
+document.body.insertBefore(main, footer)
+
+// ----- Footer -----
+footer.textContent = 'Cristina Martínez - Tienda de Productos'
 
 function renderProducts(list, container) {
   container.innerHTML = ''
@@ -134,10 +273,10 @@ closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'))
 // Aplicar filtros
 filterForm.addEventListener('submit', (e) => {
   e.preventDefault()
-  const category = document.getElementById('category-filter').value
-  const price = parseFloat(document.getElementById('price-filter').value)
+  const category = categorySelect.value
+  const price = parseFloat(priceInput.value)
 
-  let filtered = products.filter((p) => {
+  const filtered = products.filter((p) => {
     return (
       (category === '' || p.category === category) &&
       (isNaN(price) || p.price <= price)
@@ -145,9 +284,13 @@ filterForm.addEventListener('submit', (e) => {
   })
 
   if (filtered.length > 0) {
+    // Hay resultados -- pintar productos y ocultar sugeridos
     renderProducts(filtered, productsContainer)
     suggestedSection.classList.add('hidden')
+
+    suggestedContainer.innerHTML = ''
   } else {
+    // No hay resultados -- mostrar sugeridos
     const shuffled = [...products].sort(() => 0.5 - Math.random()).slice(0, 3)
     renderProducts(shuffled, suggestedContainer)
     suggestedSection.classList.remove('hidden')
@@ -162,4 +305,6 @@ clearFiltersBtn.addEventListener('click', () => {
   filterForm.reset()
   renderProducts(products, productsContainer)
   suggestedSection.classList.add('hidden')
+
+  suggestedContainer.innerHTML = ''
 })
